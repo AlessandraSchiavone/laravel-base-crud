@@ -13,7 +13,7 @@ class ComicController extends Controller
      */
     public function index()
     {
-        $comics = Comic::paginate(6);
+        $comics = Comic::orderBy('id', 'DESC')->paginate(6);
 
         return view("comics.index", compact('comics'));
     }
@@ -25,7 +25,7 @@ class ComicController extends Controller
      */
     public function create()
     {
-        //
+        return view("comics.create");
     }
 
     /**
@@ -36,7 +36,15 @@ class ComicController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $comic = new Comic();
+        $comic->fill($data);
+        $comic->save();
+
+
+        return redirect()
+        ->route('comics.show', $comic->id)
+        ->with('message', "Fumetto '" . $comic->title . "' creato correttamente");
     }
 
     /**
@@ -47,6 +55,7 @@ class ComicController extends Controller
      */
     public function show(Comic $comic)
     {
+       
         return view("comics.show", compact('comic'));
     }
 
@@ -56,9 +65,9 @@ class ComicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Comic $comic)
     {
-        //
+        return view("comics.edit", compact('comic'));
     }
 
     /**
@@ -68,9 +77,13 @@ class ComicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Comic $comic)
     {
-        //
+        $data = $request->all();
+        $comic->update($data);
+        return redirect()
+        ->route('comics.show', $comic->id)
+        ->with('message', "Fumetto '" . $comic->title . "' modificato correttamente");
     }
 
     /**
@@ -79,8 +92,12 @@ class ComicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Comic $comic)
     {
-        //
+        $comic->delete();
+
+        return redirect()
+            ->route('comics.index')
+            ->with('deleted', "Fumetto '" . $comic->title."' cancellato correttamente");
     }
 }

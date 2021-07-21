@@ -12,7 +12,10 @@
             </li>
             <li class="nav-item {{ Route::currentRouteName() == 'comics.index' ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route("comics.index") }}">Comics <span class="sr-only">(current)</span></a>
-              </li
+            </li>
+            <li class="nav-item {{ Route::currentRouteName() == 'comics.create' ? 'active' : '' }}">
+              <a class="nav-link" href="{{ route("comics.create") }}">Nuovo fumetto <span class="sr-only">(current)</span></a>
+            </li>
           </ul>
         </div>
       </nav>
